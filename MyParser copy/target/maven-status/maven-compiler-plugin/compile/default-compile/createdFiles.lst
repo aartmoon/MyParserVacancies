@@ -1,0 +1,12 @@
+com/example/entity/VacancyEntity.class
+com/example/App.class
+com/example/controller/StatisticController.class
+com/example/repository/VacancyRepository.class
+com/example/service/VacancyParser.class
+com/example/service/VacancyParserHH.class
+com/example/service/HhApiClient.class
+com/example/model/VacancyModel.class
+com/example/config/HhSearchProperties.class
+com/example/config/AppConfig.class
+com/example/service/VacancyMapper.class
+com/example/service/VacancyStatisticsService.class
