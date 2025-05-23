@@ -8,28 +8,13 @@ services:
       dockerfile: Dockerfile
     ports:
       - "8080:8080"
-    depends_on:
-      - db
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/vacancies
+      SPRING_DATASOURCE_URL: jdbc:postgresql://localhost:5432/vacancies
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: postgres
       SPRING_JPA_HIBERNATE_DDL_AUTO: update
     volumes:
       - m2-cache:/root/.m2
 
-  db:
-    image: postgres:15
-    restart: always
-    ports:
-      - "5432:5432"
-    environment:
-      POSTGRES_DB: vacancies
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-    volumes:
-      - pgdata:/var/lib/postgresql/data
-
 volumes:
-  pgdata:
   m2-cache:

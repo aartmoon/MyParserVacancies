@@ -12,7 +12,6 @@ public class Constants {
         "Санкт-Петербург", 2,
         "Екатеринбург", 3
     );
-    
-    private Constants() {
-    }
-} 
+
+    public static final int MAX_PAGE = 100;
+}

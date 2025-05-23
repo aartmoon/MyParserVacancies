@@ -1,17 +1,16 @@
-package com.example.service;
+package com.example.service.hh;
 
 import com.example.config.HhSearchProperties;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Service;
-
 import java.net.URI;
 import java.net.URLEncoder;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
-import java.util.Map;
+import com.example.config.Constants;
 
 @Service
 public class HhApiClient {
@@ -21,12 +20,6 @@ public class HhApiClient {
     private final ObjectMapper objectMapper;
     private final HhSearchProperties props;
 
-    private static final Map<String, Integer> CITY_AREAS = Map.of(
-            "Москва", 1,
-            "Санкт-Петербург", 2,
-            "Екатеринбург", 3
-    );
-
     public HhApiClient(HttpClient httpClient, ObjectMapper objectMapper, HhSearchProperties props) {
         this.httpClient = httpClient;
         this.objectMapper = objectMapper;
@@ -34,12 +27,12 @@ public class HhApiClient {
     }
 
     private int getAreaCode(String city) {
-        return CITY_AREAS.getOrDefault(city, 1); // По умолчанию Москва
+        return Constants.CITY_AREAS.getOrDefault(city, 1); // default Moscow
     }
 
     public JsonNode fetchVacanciesPage(int page, String language, String city) throws Exception {
         String textParam = URLEncoder.encode(language, StandardCharsets.UTF_8);
-        int areaCode = city != null ? getAreaCode(city) : props.getArea();
+        int areaCode = getAreaCode(city);
 
         String url = String.format(
                 "%s?text=%s&search_field=%s&area=%d&salary_from=%d&currency=%s&only_with_salary=%b&per_page=%d&page=%d",
