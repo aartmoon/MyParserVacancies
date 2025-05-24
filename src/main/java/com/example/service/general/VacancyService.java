@@ -3,24 +3,17 @@ package com.example.service.general;
 import com.example.model.Vacancy;
 import com.example.repository.VacancyRepository;
 import com.example.config.Constants;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.ArrayList;
 
 @Service
+@RequiredArgsConstructor
 public class VacancyService {
     private final VacancyParser vacancyParser;
     private final VacancyRepository vacancyRepository;
     private final VacancyFilter vacancyFilter;
-
-    public VacancyService(
-            VacancyParser vacancyParser, 
-            VacancyRepository vacancyRepository,
-            VacancyFilter vacancyFilter) {
-        this.vacancyParser = vacancyParser;
-        this.vacancyRepository = vacancyRepository;
-        this.vacancyFilter = vacancyFilter;
-    }
 
     public void refreshVacancies(String language, String city) throws Exception {
         if (language != null && !language.isEmpty()) {

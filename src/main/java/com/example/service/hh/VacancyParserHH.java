@@ -5,6 +5,7 @@ import com.example.repository.VacancyRepository;
 import com.example.service.general.VacancyLogger;
 import com.example.service.general.VacancyParser;
 import com.fasterxml.jackson.databind.JsonNode;
+import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import com.example.config.Constants;
@@ -12,19 +13,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class VacancyParserHH implements VacancyParser {
 
     private final HhApiClient apiClient;
     private final VacancyRepository vacancyRepository;
     private final VacancyLogger logger;
-
-    public VacancyParserHH(HhApiClient apiClient,
-                           VacancyRepository vacancyRepository,
-                           VacancyLogger logger) {
-        this.apiClient = apiClient;
-        this.vacancyRepository = vacancyRepository;
-        this.logger = logger;
-    }
+    private final HhVacancyParser vacancyParser;
 
     @Override
     public List<Vacancy> fetchVacancies(String language, String city) throws Exception {
@@ -56,7 +51,7 @@ public class VacancyParserHH implements VacancyParser {
             }
 
             for (JsonNode vacancyNode : items) {
-                Vacancy vacancy = Vacancy.fromJson(vacancyNode);
+                Vacancy vacancy = vacancyParser.parseVacancy(vacancyNode);
                 vacancy.setLanguage(language);
 
                 if (!vacancyRepository.existsByLink(vacancy.getLink())) {
