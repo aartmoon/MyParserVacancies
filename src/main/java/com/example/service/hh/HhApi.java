@@ -15,7 +15,7 @@ import com.example.config.Constants;
 
 @Service
 @RequiredArgsConstructor
-public class HhApiClient {
+public class HhApi {
     private static final String BASE_URL = "https://api.hh.ru/vacancies";
 
     private final HttpClient httpClient;

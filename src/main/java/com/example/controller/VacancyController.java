@@ -2,6 +2,7 @@ package com.example.controller;
 
 import com.example.model.Vacancy;
 import com.example.service.general.VacancyService;
+import com.example.service.general.VacancySortService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -11,9 +12,11 @@ import java.util.List;
 @RequestMapping("/vacancies")
 public class VacancyController {
     private final VacancyService vacancyService;
+    private final VacancySortService vacancySortService;
 
-    public VacancyController(VacancyService vacancyService) {
+    public VacancyController(VacancyService vacancyService, VacancySortService vacancySortService) {
         this.vacancyService = vacancyService;
+        this.vacancySortService = vacancySortService;
     }
 
     @GetMapping
@@ -22,6 +25,7 @@ public class VacancyController {
             @RequestParam(required = false) String city,
             @RequestParam(required = false, defaultValue = "false") boolean withSalary,
             @RequestParam(required = false, defaultValue = "false") boolean refresh,
+            @RequestParam(required = false) String sort,
             Model model) {
 
        if (refresh) {
@@ -35,10 +39,20 @@ public class VacancyController {
 
         List<Vacancy> vacancies = vacancyService.getVacancies(language, city, withSalary);
 
+        // Сортировка по зарплате только если withSalary=true
+        if (withSalary && sort != null) {
+            if ("salaryAsc".equals(sort)) {
+                vacancySortService.sortBySalary(vacancies, true);
+            } else if ("salaryDesc".equals(sort)) {
+                vacancySortService.sortBySalary(vacancies, false);
+            }
+        }
+
         model.addAttribute("vacancies", vacancies);
         model.addAttribute("selectedLanguage", language);
         model.addAttribute("selectedCity", city);
         model.addAttribute("withSalary", withSalary);
+        model.addAttribute("sort", sort);
         return "vacancies";
     }
 }

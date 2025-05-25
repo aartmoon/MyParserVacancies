@@ -10,7 +10,7 @@ public class VacancyFilter {
     
     public List<Vacancy> filterBySalary(List<Vacancy> vacancies) {
         return vacancies.stream()
-                .filter(v -> v.getSalary() != null && !v.getSalary().equals("не указано"))
+                .filter(v -> v.getSalaryFrom() != null || v.getSalaryTo() != null)
                 .collect(Collectors.toList());
     }
 }

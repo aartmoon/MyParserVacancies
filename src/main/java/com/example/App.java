@@ -9,12 +9,3 @@ public class App {
         SpringApplication.run(App.class, args);
     }
 }
-
-/*
-
-1)
-helper.sql
-2)
-COMPOSE_DOCKER_CLI_BUILD=1 DOCKER_BUILDKIT=1 docker-compose up --build
-
-*/

@@ -3,7 +3,7 @@ package com.example.service.hh;
 import com.example.model.Vacancy;
 import com.example.repository.VacancyRepository;
 import com.example.service.general.VacancyLogger;
-import com.example.service.general.VacancyParser;
+import com.example.service.general.VacancyFetcher;
 import com.fasterxml.jackson.databind.JsonNode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -14,12 +14,12 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class VacancyParserHH implements VacancyParser {
+public class HhFetcher implements VacancyFetcher {
 
-    private final HhApiClient apiClient;
+    private final HhApi apiClient;
     private final VacancyRepository vacancyRepository;
     private final VacancyLogger logger;
-    private final HhVacancyParser vacancyParser;
+    private final HhToVacancy vacancyParser;
 
     @Override
     public List<Vacancy> fetchVacancies(String language, String city) throws Exception {

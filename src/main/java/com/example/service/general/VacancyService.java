@@ -11,7 +11,7 @@ import java.util.ArrayList;
 @Service
 @RequiredArgsConstructor
 public class VacancyService {
-    private final VacancyParser vacancyParser;
+    private final VacancyFetcher vacancyParser;
     private final VacancyRepository vacancyRepository;
     private final VacancyFilter vacancyFilter;
 
@@ -30,21 +30,17 @@ public class VacancyService {
         
         if (language != null && !language.isEmpty()) {
             if (city != null && !city.isEmpty()) {
-                // Поиск по языку и городу
                 vacancies.addAll(vacancyRepository.findByLanguageAndCity(language, city));
             } else {
-                // Поиск по языку во всех городах
                 for (String c : Constants.CITIES) {
                     vacancies.addAll(vacancyRepository.findByLanguageAndCity(language, c));
                 }
             }
         } else if (city != null && !city.isEmpty()) {
-            // Поиск по городу для всех языков
             for (String lang : Constants.LANGUAGES) {
                 vacancies.addAll(vacancyRepository.findByLanguageAndCity(lang, city));
             }
         } else {
-            // Если ничего не выбрано - показываем все вакансии
             vacancies.addAll(vacancyRepository.findAll());
         }
 

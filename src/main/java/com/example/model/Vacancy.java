@@ -26,7 +26,13 @@ public class Vacancy {
     private String title;
 
     @Column
-    private String salary;
+    private Integer salaryFrom;
+
+    @Column
+    private Integer salaryTo;
+
+    @Column
+    private String currency;
 
     @Column(nullable = false)
     private String link;
