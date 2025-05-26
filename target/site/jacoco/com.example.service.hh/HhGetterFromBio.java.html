@@ -7,7 +7,7 @@ import com.fasterxml.jackson.databind.JsonNode;
     public static Integer convertToRub(Integer value, String currency) {
 <span class="pc bpc" id="L8" title="1 of 4 branches missed.">        if (value == null || currency == null) return value;</span>
 <span class="nc" id="L9">        Double rate = Constants.CURRENCY_TO_RUB.getOrDefault(currency, 1.0);</span>
-<span class="nc" id="L10">        return (int)Math.round(value * rate);</span>
+<span class="nc" id="L10">        return (int) Math.round(value * rate);</span>
     }
 
     public static String getText(JsonNode node, String fieldName) {

@@ -15,10 +15,10 @@ public class Constants {
 
     public static final int MAX_PAGE = 100;
 
-    public static final Map<String, Double> CURRENCY_TO_RUB = Map.of(
-        "RUR", 1.0,
-        "RUB", 1.0,
-        "USD", 90.0,
-        "EUR", 100.0
+    public static final Map<String, Integer> CURRENCY_TO_RUB = Map.of(
+        "RUR", 1,
+        "RUB", 1,
+        "USD", 90,
+        "EUR", 100
     );
 }

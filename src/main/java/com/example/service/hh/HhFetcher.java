@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 import com.example.config.Constants;
 import java.util.ArrayList;
 import java.util.List;
-
+// to do multi
 @Service
 @RequiredArgsConstructor
 public class HhFetcher implements VacancyFetcher {

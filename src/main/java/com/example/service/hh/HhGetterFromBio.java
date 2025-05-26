@@ -6,8 +6,8 @@ import com.fasterxml.jackson.databind.JsonNode;
 public class HhGetterFromBio {
     public static Integer convertToRub(Integer value, String currency) {
         if (value == null || currency == null) return value;
-        Double rate = Constants.CURRENCY_TO_RUB.getOrDefault(currency, 1.0);
-        return (int) Math.round(value * rate);
+        int rate = Constants.CURRENCY_TO_RUB.getOrDefault(currency, 1);
+        return value * rate;
     }
 
     public static String getText(JsonNode node, String fieldName) {
