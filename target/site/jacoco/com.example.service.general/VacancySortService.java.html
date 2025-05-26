@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>VacancySortService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">MyParser</a> &gt; <a href="index.source.html" class="el_package">com.example.service.general</a> &gt; <span class="el_source">VacancySortService.java</span></div><h1>VacancySortService.java</h1><pre class="source lang-java linenums">package com.example.service.general;
+
+import com.example.model.Vacancy;
+import org.springframework.stereotype.Service;
+import java.util.Comparator;
+import java.util.List;
+
+@Service
+<span class="fc" id="L9">public class VacancySortService {</span>
+    public void sortBySalary(List&lt;Vacancy&gt; vacancies, boolean ascending) {
+        Comparator&lt;Vacancy&gt; comparator;
+<span class="fc bfc" id="L12" title="All 2 branches covered.">        if (ascending) {</span>
+<span class="fc" id="L13">            comparator = Comparator</span>
+<span class="fc" id="L14">                    .comparing(</span>
+<span class="fc bfc" id="L15" title="All 4 branches covered.">                            (Vacancy v) -&gt; (v.getSalaryFrom() == null || v.getSalaryFrom() == 0) ? null : v.getSalaryFrom(),</span>
+<span class="fc" id="L16">                            Comparator.nullsLast(Integer::compareTo)</span>
+                    )
+<span class="fc" id="L18">                    .thenComparing(</span>
+<span class="fc bfc" id="L19" title="All 4 branches covered.">                            (Vacancy v) -&gt; (v.getSalaryTo() == null || v.getSalaryTo() == 0) ? null : v.getSalaryTo(),</span>
+<span class="fc" id="L20">                            Comparator.nullsLast(Integer::compareTo)</span>
+                    );
+        } else {
+<span class="fc" id="L23">            comparator = Comparator</span>
+<span class="fc" id="L24">                    .comparing(</span>
+<span class="fc bfc" id="L25" title="All 4 branches covered.">                            (Vacancy v) -&gt; (v.getSalaryTo() == null || v.getSalaryTo() == 0) ? null : v.getSalaryTo(),</span>
+<span class="fc" id="L26">                            Comparator.nullsLast(Comparator.reverseOrder())</span>
+                    )
+<span class="fc" id="L28">                    .thenComparing(</span>
+<span class="fc bfc" id="L29" title="All 4 branches covered.">                            (Vacancy v) -&gt; (v.getSalaryFrom() == null || v.getSalaryFrom() == 0) ? null : v.getSalaryFrom(),</span>
+<span class="fc" id="L30">                            Comparator.nullsLast(Comparator.reverseOrder())</span>
+                    );
+        }
+<span class="fc" id="L33">        vacancies.sort(comparator);</span>
+<span class="fc" id="L34">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>

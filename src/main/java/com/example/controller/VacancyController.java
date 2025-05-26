@@ -3,6 +3,7 @@ package com.example.controller;
 import com.example.model.Vacancy;
 import com.example.service.general.VacancyService;
 import com.example.service.general.VacancySortService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -10,14 +11,10 @@ import java.util.List;
 
 @Controller
 @RequestMapping("/vacancies")
+@RequiredArgsConstructor
 public class VacancyController {
     private final VacancyService vacancyService;
     private final VacancySortService vacancySortService;
-
-    public VacancyController(VacancyService vacancyService, VacancySortService vacancySortService) {
-        this.vacancyService = vacancyService;
-        this.vacancySortService = vacancySortService;
-    }
 
     @GetMapping
     public String showVacancies(
