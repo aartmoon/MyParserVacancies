@@ -55,19 +55,16 @@
                 </configuration>
             </plugin>
 
-            <!-- Плагин JaCoCo для покрытия -->
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
                 <version>0.8.10</version>
                 <executions>
-                    <!-- Подготовка агента для сбора данных -->
                     <execution>
                         <goals>
                             <goal>prepare-agent</goal>
                         </goals>
                     </execution>
-                    <!-- Генерация отчета -->
                     <execution>
                         <id>report</id>
                         <phase>verify</phase>
@@ -172,12 +169,12 @@
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-core</artifactId>
-            <version>5.12.0</version> <!-- or latest -->
+            <version>5.12.0</version>
         </dependency>
         <dependency>
             <groupId>net.bytebuddy</groupId>
             <artifactId>byte-buddy</artifactId>
-            <version>1.14.12</version> <!-- or latest -->
+            <version>1.14.12</version>
         </dependency>
 
     </dependencies>

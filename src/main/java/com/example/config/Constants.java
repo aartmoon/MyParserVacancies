@@ -13,7 +13,7 @@ public class Constants {
         "Екатеринбург", 3
     );
 
-    public static final int MAX_PAGE = 100;
+    public static final int MAX_PAGE = 1;
 
     public static final Map<String, Integer> CURRENCY_TO_RUB = Map.of(
         "RUR", 1,

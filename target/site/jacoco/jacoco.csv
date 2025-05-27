@@ -1,5 +1,5 @@
 GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
-MyParser,com.example.service.hh,HhGetterFromBio,20,49,1,15,3,10,2,11,1,4
+MyParser,com.example.service.hh,HhGetterFromBio,17,49,1,15,3,10,2,11,1,4
 MyParser,com.example.service.hh,HhFetcher,162,0,12,0,38,0,8,0,2,0
 MyParser,com.example.service.hh,HhApi,0,124,0,2,0,23,0,4,0,3
 MyParser,com.example.service.hh,HhToVacancy,117,0,4,0,36,0,5,0,3,0

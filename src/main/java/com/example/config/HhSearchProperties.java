@@ -11,5 +11,5 @@ public class HhSearchProperties {
     private final int minSalary = 0;
     private final String currency = "RUR";
     private final boolean onlyWithSalary = false;
-    private final int perPage = 50;
+    private final int perPage = 100;
 }

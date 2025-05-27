@@ -77,17 +77,14 @@ class HhApiTest {
 
     @Test
     void fetchVacanciesPage_UrlEncoding() throws Exception {
-        // Arrange
         String expectedJson = "{\"items\":[],\"found\":0,\"pages\":1,\"per_page\":20,\"page\":0}";
         when(httpResponse.statusCode()).thenReturn(200);
         when(httpResponse.body()).thenReturn(expectedJson);
         when(httpClient.send(any(HttpRequest.class), any())).thenReturn(httpResponse);
         when(objectMapper.readTree(expectedJson)).thenReturn(mock(JsonNode.class));
 
-        // Act
         hhApi.fetchVacanciesPage(0, "Java", "Москва");
 
-        // Assert
         verify(httpClient).send(argThat(request -> {
             String uri = request.uri().toString();
             return uri.contains("text=Java") &&
@@ -101,17 +98,14 @@ class HhApiTest {
 
     @Test
     void fetchVacanciesPage_DifferentCity() throws Exception {
-        // Arrange
         String expectedJson = "{\"items\":[],\"found\":0,\"pages\":1,\"per_page\":20,\"page\":0}";
         when(httpResponse.statusCode()).thenReturn(200);
         when(httpResponse.body()).thenReturn(expectedJson);
         when(httpClient.send(any(HttpRequest.class), any())).thenReturn(httpResponse);
         when(objectMapper.readTree(expectedJson)).thenReturn(mock(JsonNode.class));
 
-        // Act
         hhApi.fetchVacanciesPage(0, "Java", "Санкт-Петербург");
 
-        // Assert
         verify(httpClient).send(argThat(request -> {
             String uri = request.uri().toString();
             return uri.contains("area=2") &&
