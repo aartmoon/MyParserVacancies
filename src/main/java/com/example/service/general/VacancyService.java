@@ -14,6 +14,8 @@ public class VacancyService {
     private final VacancyFetcher vacancyParser;
     private final VacancyRepository vacancyRepository;
     private final VacancyFilter vacancyFilter;
+    private final VacancySortService vacancySortService;
+    private final VacancyCleaner vacancyCleaner;
 
     public void refreshVacancies(String language, String city) throws Exception {
         if (language != null && !language.isEmpty()) {
@@ -44,9 +46,13 @@ public class VacancyService {
             vacancies.addAll(vacancyRepository.findAll());
         }
 
+        // чистим вакансии от <тегов>
+        vacancies = vacancyCleaner.clean(vacancies);
+
         if (withSalary) {
             return vacancyFilter.filterBySalary(vacancies);
         }
+
         return vacancies;
     }
 }

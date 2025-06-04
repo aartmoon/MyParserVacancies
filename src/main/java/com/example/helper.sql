@@ -12,3 +12,5 @@ CREATE TABLE IF NOT EXISTS vacancies (
                                          responsibility TEXT,
                                          published_at TIMESTAMP
 );
+
+TRUNCATE TABLE vacancies;
