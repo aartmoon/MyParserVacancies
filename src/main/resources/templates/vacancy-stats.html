@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Vacancy Statistics</title>
+    <meta charset="UTF-8">
+</head>
+<body>
+<h1>Статистика по вакансиям</h1>
+
+<h2>Средняя зп по языкам</h2>
+<ul>
+    <li th:each="entry : ${averageSalaryByLanguage}">
+        <span th:text="${entry.key}"></span>: <span
+            th:text="${#numbers.formatDecimal(entry.value, 0, 'COMMA', 0, 'POINT')}">0</span> ₽
+    </li>
+</ul>
+
+<h2>Средняя зп по всем языкам</h2>
+<p><span th:text="${#numbers.formatDecimal(totalAverageSalary, 0, 'COMMA', 0, 'POINT')}">0</span> ₽</p>
+<div class="button-container">
+    <a href="/" class="button">Вернуться к поиску</a>
+</div>
+</body>
+</html>
