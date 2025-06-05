@@ -23,7 +23,7 @@ public class HhApi {
     private final HhSearchProperties props;
 
     private int getAreaCode(String city) {
-        return Constants.CITY_AREAS.getOrDefault(city, 1); // default Moscow
+        return Constants.CITY_AREAS_HH.getOrDefault(city, 1); // default Moscow
     }
 
     public JsonNode fetchVacanciesPage(int page, String language, String city) throws Exception {

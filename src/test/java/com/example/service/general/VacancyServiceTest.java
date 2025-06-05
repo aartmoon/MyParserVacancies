@@ -3,6 +3,7 @@ package com.example.service.general;
 import com.example.model.Vacancy;
 import com.example.repository.VacancyRepository;
 import com.example.config.Constants;
+import com.example.service.trudvsem.TrudVsemFetcher;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -22,6 +23,9 @@ public class VacancyServiceTest {
 
     @Mock
     private VacancyRepository vacancyRepository;
+
+    @Mock
+    private TrudVsemFetcher trudVsemFetcher;
 
     @Mock
     private VacancyFilter vacancyFilter;
@@ -57,7 +61,7 @@ public class VacancyServiceTest {
     @Test
     void refreshVacanciesWithEmptyLanguageCallsFetchForAllLanguages() throws Exception {
         String language = "";
-        String city = "London";
+        String city = "Москва";
 
         // Все языки, определённые в Constants.LANGUAGES
         List<String> allLanguages = Constants.LANGUAGES;
