@@ -19,19 +19,19 @@ import static org.mockito.Mockito.*;
 public class VacancyServiceTest {
 
     @Mock
-    private VacancyFetcher vacancyFetcher;
+    private VacancyFetcher vacancyFetcher1;
+
+    @Mock
+    private VacancyFetcher vacancyFetcher2;
 
     @Mock
     private VacancyRepository vacancyRepository;
 
     @Mock
-    private TrudVsemFetcher trudVsemFetcher;
-
-    @Mock
     private VacancyFilter vacancyFilter;
 
     @Mock
-    private VacancySortService vacancySortService; // не используется в методах, но нужен для конструктора
+    private VacancySortService vacancySortService;
 
     @Mock
     private VacancyCleaner vacancyCleaner;
@@ -39,11 +39,14 @@ public class VacancyServiceTest {
     @InjectMocks
     private VacancyService vacancyService;
 
+    private List<VacancyFetcher> vacancyFetchers;
+
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
+        vacancyFetchers = Arrays.asList(vacancyFetcher1, vacancyFetcher2);
+        vacancyService = new VacancyService(vacancyFetchers, vacancyRepository, vacancyFilter, vacancyCleaner);
     }
-
 
     @Test
     void refreshVacanciesWithLanguageOnlyCallsFetchOnce() throws Exception {
@@ -52,10 +55,11 @@ public class VacancyServiceTest {
 
         vacancyService.refreshVacancies(language, city);
 
-        // Должен вызвать vacancyFetcher.fetchVacancies только один раз с заданными параметрами
-        verify(vacancyFetcher, times(1)).fetchVacancies(language, city);
-        // Больше вызовов не должно быть
-        verifyNoMoreInteractions(vacancyFetcher);
+        // Проверяем, что каждый фетчер вызван один раз
+        for (VacancyFetcher fetcher : vacancyFetchers) {
+            verify(fetcher, times(1)).fetchVacancies(language, city);
+            verifyNoMoreInteractions(fetcher);
+        }
     }
 
     @Test
@@ -63,17 +67,17 @@ public class VacancyServiceTest {
         String language = "";
         String city = "Москва";
 
-        // Все языки, определённые в Constants.LANGUAGES
         List<String> allLanguages = Constants.LANGUAGES;
 
         vacancyService.refreshVacancies(language, city);
 
-        // Должен вызвать fetchVacancies(lang, city) для каждого lang из Constants.LANGUAGES
-        for (String lang : allLanguages) {
-            verify(vacancyFetcher).fetchVacancies(lang, city);
+        // Проверяем, что каждый фетчер вызван для каждого языка
+        for (VacancyFetcher fetcher : vacancyFetchers) {
+            for (String lang : allLanguages) {
+                verify(fetcher).fetchVacancies(lang, city);
+            }
+            verify(fetcher, times(allLanguages.size())).fetchVacancies(anyString(), eq(city));
         }
-        // Всего вызовов равно числу языков
-        verify(vacancyFetcher, times(allLanguages.size())).fetchVacancies(anyString(), eq(city));
     }
 
     @Test
@@ -85,10 +89,13 @@ public class VacancyServiceTest {
 
         vacancyService.refreshVacancies(language, city);
 
-        for (String lang : allLanguages) {
-            verify(vacancyFetcher).fetchVacancies(lang, city);
+        // Проверяем, что каждый фетчер вызван для каждого языка
+        for (VacancyFetcher fetcher : vacancyFetchers) {
+            for (String lang : allLanguages) {
+                verify(fetcher).fetchVacancies(lang, city);
+            }
+            verify(fetcher, times(allLanguages.size())).fetchVacancies(anyString(), eq(city));
         }
-        verify(vacancyFetcher, times(allLanguages.size())).fetchVacancies(anyString(), eq(city));
     }
 
     @Test

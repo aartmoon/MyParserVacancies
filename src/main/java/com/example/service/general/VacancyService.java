@@ -12,20 +12,21 @@ import java.util.ArrayList;
 @Service
 @RequiredArgsConstructor
 public class VacancyService {
-    private final VacancyFetcher vacancyParser;
+    private final List<VacancyFetcher> vacancyFetchers;
     private final VacancyRepository vacancyRepository;
     private final VacancyFilter vacancyFilter;
     private final VacancyCleaner vacancyCleaner;
-    private final TrudVsemFetcher trudVsemFetcher;
 
     public void refreshVacancies(String language, String city) throws Exception {
         if (language != null && !language.isEmpty()) {
-            vacancyParser.fetchVacancies(language, city);
-            trudVsemFetcher.fetchVacancies(language, city);
+            for (VacancyFetcher fetcher : vacancyFetchers) {
+                fetcher.fetchVacancies(language, city);
+            }
         } else {
             for (String lang : Constants.LANGUAGES) {
-                vacancyParser.fetchVacancies(lang, city);
-                trudVsemFetcher.fetchVacancies(lang, city);
+                for (VacancyFetcher fetcher : vacancyFetchers) {
+                    fetcher.fetchVacancies(lang, city);
+                }
             }
         }
     }

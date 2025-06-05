@@ -2,6 +2,7 @@ package com.example.service.trudvsem;
 
 import com.example.model.Vacancy;
 import com.example.repository.VacancyRepository;
+import com.example.service.general.VacancyFetcher;
 import com.example.service.general.VacancyLogger;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -15,13 +16,14 @@ import static com.example.config.Constants.MAX_PAGES_TRUDVSEM;
 
 @Service
 @RequiredArgsConstructor
-public class TrudVsemFetcher {
+public class TrudVsemFetcher implements VacancyFetcher {
 
     private final TrudVsemApi api;
     private final TrudVsemToVacancy parser;
     private final VacancyRepository vacancyRepository;
     private final VacancyLogger logger;
 
+    @Override
     public List<Vacancy> fetchVacancies(String language, String city) {
         List<Vacancy> result = new ArrayList<>();
         int page = 0;

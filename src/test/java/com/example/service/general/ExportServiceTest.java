@@ -7,6 +7,7 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.mock.web.MockHttpServletResponse;
 
@@ -23,6 +24,9 @@ import static org.mockito.Mockito.*;
 
 
 public class ExportServiceTest {
+
+    @Mock
+    private List<VacancyFetcher> vacancyFetchers;
 
     private VacancyService vacancyService;
     private ExportService exportService;
@@ -139,10 +143,10 @@ public class ExportServiceTest {
         v.setCompany("DataCorp");
         v.setLink("https://datacorp.com/jobs/100");
         v.setCity("Москва");
-        v.setLanguage("Kotlin");
+        v.setLanguage("Java");
         v.setSalaryFrom(7000);
         v.setSalaryTo(9000);
-        v.setRequirement("Kotlin, Spring Boot");
+        v.setRequirement("Java, Spring Boot");
         v.setResponsibility("Build REST API");
         v.setPublishedAt(LocalDateTime.of(2025, 3, 10, 9, 45, 0));
 
@@ -181,10 +185,10 @@ public class ExportServiceTest {
         assertEquals("DataCorp",             dataRow.getCell(2).getStringCellValue());
         assertEquals("https://datacorp.com/jobs/100", dataRow.getCell(3).getStringCellValue());
         assertEquals("Москва",               dataRow.getCell(4).getStringCellValue());
-        assertEquals("Kotlin",               dataRow.getCell(5).getStringCellValue());
+        assertEquals("Java",               dataRow.getCell(5).getStringCellValue());
         assertEquals("7000",                 dataRow.getCell(6).getStringCellValue());
         assertEquals("9000",                 dataRow.getCell(7).getStringCellValue());
-        assertEquals("Kotlin, Spring Boot",  dataRow.getCell(8).getStringCellValue());
+        assertEquals("Java, Spring Boot",  dataRow.getCell(8).getStringCellValue());
         assertEquals("Build REST API",       dataRow.getCell(9).getStringCellValue());
         assertEquals("2025-03-10 09:45:00",  dataRow.getCell(10).getStringCellValue());
 

@@ -4,6 +4,7 @@ import com.example.model.Vacancy;
 import com.example.service.general.VacancyService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 import org.mockito.Mockito;
 
 import java.time.LocalDateTime;
@@ -16,6 +17,9 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 public class VacancyStatsServiceTest {
+
+    @Mock
+    private List<VacancyFetcher> vacancyFetchers;
 
     private VacancyService vacancyService;
     private VacancyStatsService statsService;
