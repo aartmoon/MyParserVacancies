@@ -54,4 +54,4 @@ public class Vacancy {
 
     @Column
     private LocalDateTime publishedAt;
-} 
+}

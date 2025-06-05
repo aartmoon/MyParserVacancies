@@ -3,6 +3,7 @@ package com.example.service.general;
 import com.example.model.Vacancy;
 import com.example.repository.VacancyRepository;
 import com.example.config.Constants;
+import com.example.service.trudvsem.TrudVsemFetcher;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import java.util.List;
@@ -14,15 +15,17 @@ public class VacancyService {
     private final VacancyFetcher vacancyParser;
     private final VacancyRepository vacancyRepository;
     private final VacancyFilter vacancyFilter;
-    private final VacancySortService vacancySortService;
     private final VacancyCleaner vacancyCleaner;
+    private final TrudVsemFetcher trudVsemFetcher;
 
     public void refreshVacancies(String language, String city) throws Exception {
         if (language != null && !language.isEmpty()) {
             vacancyParser.fetchVacancies(language, city);
+            trudVsemFetcher.fetchVacancies(language, city);
         } else {
             for (String lang : Constants.LANGUAGES) {
                 vacancyParser.fetchVacancies(lang, city);
+                trudVsemFetcher.fetchVacancies(lang, city);
             }
         }
     }
