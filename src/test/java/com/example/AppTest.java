@@ -6,7 +6,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import static org.assertj.core.api.Assertions.assertThatCode;
 
 @SpringBootTest(classes = App.class)
-class AppTest {
+public class AppTest {
     @Test
     void contextLoads() {
     }

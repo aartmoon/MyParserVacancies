@@ -42,9 +42,9 @@ public class VacancyServiceTest {
 
 
     @Test
-    void refreshVacancies_withLanguageOnly_callsFetchOnce() throws Exception {
+    void refreshVacanciesWithLanguageOnlyCallsFetchOnce() throws Exception {
         String language = "Java";
-        String city = "Moscow";
+        String city = "Москва";
 
         vacancyService.refreshVacancies(language, city);
 
@@ -55,7 +55,7 @@ public class VacancyServiceTest {
     }
 
     @Test
-    void refreshVacancies_withEmptyLanguage_callsFetchForAllLanguages() throws Exception {
+    void refreshVacanciesWithEmptyLanguageCallsFetchForAllLanguages() throws Exception {
         String language = "";
         String city = "London";
 
@@ -73,9 +73,9 @@ public class VacancyServiceTest {
     }
 
     @Test
-    void refreshVacancies_withNullLanguage_callsFetchForAllLanguages() throws Exception {
+    void refreshVacanciesWithNullLanguageCallsFetchForAllLanguages() throws Exception {
         String language = null;
-        String city = "Berlin";
+        String city = "Москва";
 
         List<String> allLanguages = Constants.LANGUAGES;
 
@@ -88,9 +88,9 @@ public class VacancyServiceTest {
     }
 
     @Test
-    void getVacancies_withLanguageAndCity_returnsFilteredIfWithSalaryTrue() {
+    void getVacanciesWithLanguageAndCityReturnsFilteredIfWithSalaryTrue() {
         String language = "Java";
-        String city = "Moscow";
+        String city = "Москва";
         boolean withSalary = true;
 
         Vacancy v1 = new Vacancy();
@@ -102,7 +102,7 @@ public class VacancyServiceTest {
         when(vacancyRepository.findByLanguageAndCity(language, city))
                 .thenReturn(Arrays.asList(v1, v2));
 
-        // Метод cleaner возвращает тот же список (можем вернуть новый список для проверки)
+        // Метод cleaner возвращает тот же список
         List<Vacancy> cleanedList = Arrays.asList(v1, v2);
         when(vacancyCleaner.clean(anyList()))
                 .thenReturn(cleanedList);
@@ -112,13 +112,10 @@ public class VacancyServiceTest {
         when(vacancyFilter.filterBySalary(cleanedList))
                 .thenReturn(filteredList);
 
-        // Вызов метода
         List<Vacancy> result = vacancyService.getVacancies(language, city, withSalary);
 
-        // Поскольку withSalary = true, итоговый список — это результат filterBySalary
         assertThat(result).isEqualTo(filteredList);
 
-        // Проверяем, что вызовы были по порядку:
         InOrder inOrder = inOrder(vacancyRepository, vacancyCleaner, vacancyFilter);
         inOrder.verify(vacancyRepository).findByLanguageAndCity(language, city);
         inOrder.verify(vacancyCleaner).clean(Arrays.asList(v1, v2));
@@ -127,7 +124,7 @@ public class VacancyServiceTest {
     }
 
     @Test
-    void getVacancies_withLanguageAndCity_returnsCleanedIfWithSalaryFalse() {
+    void getVacanciesWithLanguageAndCityReturnsCleanedIfWithSalaryFalse() {
         String language = "Python";
         String city = "London";
         boolean withSalary = false;
@@ -144,7 +141,6 @@ public class VacancyServiceTest {
 
         List<Vacancy> result = vacancyService.getVacancies(language, city, withSalary);
 
-        // С withSalary=false возвращается просто cleanedList
         assertThat(result).isEqualTo(cleanedList);
 
         InOrder inOrder = inOrder(vacancyRepository, vacancyCleaner);
@@ -154,7 +150,7 @@ public class VacancyServiceTest {
     }
 
     @Test
-    void getVacancies_withLanguageAndEmptyCity_queriesAllCities() {
+    void getVacanciesWithLanguageAndEmptyCityQueriesAllCities() {
         String language = "Go";
         String city = "";
         boolean withSalary = false;
@@ -164,10 +160,8 @@ public class VacancyServiceTest {
         Vacancy v2 = new Vacancy();
         v2.setId(200L);
 
-        // Допустим, Constants.CITIES содержит ["Moscow", "London"]
         List<String> allCities = Constants.CITIES;
 
-        // Для каждого города будем возвращать список, содержащий по одной вакансии
         when(vacancyRepository.findByLanguageAndCity(eq(language), anyString()))
                 .thenAnswer(invocation -> {
                     String c = invocation.getArgument(1);
@@ -180,17 +174,14 @@ public class VacancyServiceTest {
                     }
                 });
 
-        // После получения из репозитория получаем список [v1, v2]
         List<Vacancy> combined = Arrays.asList(v1, v2);
         when(vacancyCleaner.clean(anyList()))
                 .thenReturn(combined);
 
         List<Vacancy> result = vacancyService.getVacancies(language, city, withSalary);
 
-        // С withSalary=false возвращаем просто cleanedList = combined
         assertThat(result).isEqualTo(combined);
 
-        // Проверяем, что вызов findByLanguageAndCity был для каждого города
         for (String c : allCities) {
             verify(vacancyRepository).findByLanguageAndCity(language, c);
         }
@@ -198,9 +189,9 @@ public class VacancyServiceTest {
     }
 
     @Test
-    void getVacancies_withEmptyLanguageAndCity_queriesAllLanguages() {
+    void getVacanciesWithEmptyLanguageAndCityQueriesAllLanguages() {
         String language = "";
-        String city = "Paris";
+        String city = "Екатеринбург";
         boolean withSalary = false;
 
         Vacancy v1 = new Vacancy();
@@ -237,7 +228,7 @@ public class VacancyServiceTest {
     }
 
     @Test
-    void getVacancies_withEmptyLanguageAndEmptyCity_usesFindAll() {
+    void getVacanciesWithEmptyLanguageAndEmptyCityUsesFindAll() {
         String language = "";
         String city = "";
         boolean withSalary = false;
@@ -263,9 +254,9 @@ public class VacancyServiceTest {
     }
 
     @Test
-    void getVacancies_filterBySalaryReturnsEmpty() {
-        String language = "C++";
-        String city = "Rome";
+    void getVacanciesFilterBySalaryReturnsEmpty() {
+        String language = "Go";
+        String city = "Москва";
         boolean withSalary = true;
 
         Vacancy v1 = new Vacancy();
@@ -274,18 +265,15 @@ public class VacancyServiceTest {
         when(vacancyRepository.findByLanguageAndCity(language, city))
                 .thenReturn(Collections.singletonList(v1));
 
-        // Cleaner пропускает список без изменений
         List<Vacancy> cleanedList = Collections.singletonList(v1);
         when(vacancyCleaner.clean(anyList()))
                 .thenReturn(cleanedList);
 
-        // Фильтр убирает все (возвращает пустой)
         when(vacancyFilter.filterBySalary(cleanedList))
                 .thenReturn(Collections.emptyList());
 
         List<Vacancy> result = vacancyService.getVacancies(language, city, withSalary);
 
-        // Так как filterBySalary вернул пустой, итоговый тоже пуст
         assertThat(result).isEmpty();
 
         InOrder inOrder = inOrder(vacancyRepository, vacancyCleaner, vacancyFilter);

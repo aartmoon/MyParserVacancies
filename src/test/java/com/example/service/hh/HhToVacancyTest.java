@@ -19,7 +19,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-class HhToVacancyTest {
+public class HhToVacancyTest {
 
     @Mock
     private VacancyLogger logger;
@@ -30,8 +30,7 @@ class HhToVacancyTest {
     private final ObjectMapper mapper = new ObjectMapper();
 
     @Test
-    void testParseVacancy_withValidJson_shouldParseAllFields() throws Exception {
-        // Собираем JSON-строку с корректными данными
+    void validJsond() throws Exception {
         String json = "{\n" +
                 "  \"name\": \"Java Developer\",\n" +
                 "  \"salary\": {\n" +
@@ -51,7 +50,6 @@ class HhToVacancyTest {
 
         Vacancy result = parser.parseVacancy(vacancyNode);
 
-        // Проверяем title
         assertThat(result.getTitle()).isEqualTo("Java Developer");
 
         // Поскольку валюта "RUR", конвертация вернёт те же числа
@@ -59,29 +57,24 @@ class HhToVacancyTest {
         assertThat(result.getSalaryTo()).isEqualTo(200);
         assertThat(result.getCurrency()).isEqualTo("RUR");
 
-        // Ссылка, компания, город
         assertThat(result.getLink()).isEqualTo("https://hh.ru/vacancy/12345");
         assertThat(result.getCompany()).isEqualTo("Acme Corp");
         assertThat(result.getCity()).isEqualTo("Москва");
-
-        // Snippet
         assertThat(result.getRequirement()).isEqualTo("Опыт работы от 3 лет");
         assertThat(result.getResponsibility()).isEqualTo("Разработка backend");
 
-        // Проверяем, что дата распарсилась правильно
         LocalDateTime expected = OffsetDateTime.parse(
                 "2025-06-01T12:00:00+0000",
                 DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssZ")
         ).toLocalDateTime();
+
         assertThat(result.getPublishedAt()).isEqualTo(expected);
 
-        // Убедимся, что при корректной дате метод логгирования ошибки не вызывался
         verify(logger, never()).logDateParseError(anyString(), any(Exception.class));
     }
 
     @Test
-    void testParseVacancy_withInvalidDate_shouldSetPublishedAtNullAndLogError() throws Exception {
-        // Поле published_at имеет некорректный формат
+    void invalidJson() throws Exception {
         String json = "{\n" +
                 "  \"name\": \"Python Developer\",\n" +
                 "  \"salary\": { \"from\": 50, \"to\": 150, \"currency\": \"RUR\" },\n" +

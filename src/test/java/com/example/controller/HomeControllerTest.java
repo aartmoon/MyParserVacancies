@@ -12,21 +12,23 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 
 @WebMvcTest(HomeController.class)
-class HomeControllerTest {
+public class HomeControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
 
     @Test
-    @DisplayName("GET / должен вернуть view 'index' и заполнить модель языками и городами")
-    void home_shouldReturnIndexViewAndPopulateModel() throws Exception {
+    void homeShouldReturnIndexViewAndPopulateModel() throws Exception {
         mockMvc.perform(get("/"))
                 .andExpect(status().isOk())
+
                 // Проверяем, что view называется "index"
                 .andExpect(view().name("index"))
+
                 // Проверяем, что в модель добавлен атрибут "languages" со значением Constants.LANGUAGES
                 .andExpect(model().attributeExists("languages"))
                 .andExpect(model().attribute("languages", Constants.LANGUAGES))
+
                 // Проверяем, что в модель добавлен атрибут "cities" со значением Constants.CITIES
                 .andExpect(model().attributeExists("cities"))
                 .andExpect(model().attribute("cities", Constants.CITIES));

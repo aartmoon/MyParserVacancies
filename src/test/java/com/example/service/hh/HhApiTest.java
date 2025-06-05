@@ -18,7 +18,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-class HhApiTest {
+public class HhApiTest {
 
     @Mock
     private HttpClient httpClient;
@@ -46,37 +46,32 @@ class HhApiTest {
     }
 
     @Test
-    void fetchVacanciesPage_Success() throws Exception {
-        // Arrange
+    void fetchVacanciesPageSuccess() throws Exception {
         String expectedJson = "{\"items\":[],\"found\":0,\"pages\":1,\"per_page\":20,\"page\":0}";
         when(httpResponse.statusCode()).thenReturn(200);
         when(httpResponse.body()).thenReturn(expectedJson);
         when(httpClient.send(any(HttpRequest.class), any())).thenReturn(httpResponse);
         when(objectMapper.readTree(expectedJson)).thenReturn(mock(JsonNode.class));
 
-        // Act
         JsonNode result = hhApi.fetchVacanciesPage(0, "Java", "Москва");
 
-        // Assert
         assertNotNull(result);
         verify(httpClient).send(any(HttpRequest.class), any());
         verify(objectMapper).readTree(expectedJson);
     }
 
     @Test
-    void fetchVacanciesPage_ErrorResponse() throws Exception {
-        // Arrange
+    void fetchVacanciesPageErrorResponse() throws Exception {
         when(httpResponse.statusCode()).thenReturn(500);
         when(httpClient.send(any(HttpRequest.class), any())).thenReturn(httpResponse);
 
-        // Act & Assert
         assertThrows(RuntimeException.class, () ->
                 hhApi.fetchVacanciesPage(0, "Java", "Москва")
         );
     }
 
     @Test
-    void fetchVacanciesPage_UrlEncoding() throws Exception {
+    void fetchVacanciesPageUrlEncoding() throws Exception {
         String expectedJson = "{\"items\":[],\"found\":0,\"pages\":1,\"per_page\":20,\"page\":0}";
         when(httpResponse.statusCode()).thenReturn(200);
         when(httpResponse.body()).thenReturn(expectedJson);
@@ -97,7 +92,7 @@ class HhApiTest {
     }
 
     @Test
-    void fetchVacanciesPage_DifferentCity() throws Exception {
+    void fetchVacanciesPageDifferentCity() throws Exception {
         String expectedJson = "{\"items\":[],\"found\":0,\"pages\":1,\"per_page\":20,\"page\":0}";
         when(httpResponse.statusCode()).thenReturn(200);
         when(httpResponse.body()).thenReturn(expectedJson);

@@ -8,22 +8,22 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class HhGetterFromBioTest {
+public class HhGetterFromBioTest {
 
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Test
-    void convertToRub_NullValue() {
+    void convertToRubNullValue() {
         assertNull(HhGetterFromBio.convertToRub(null, "USD"));
     }
 
     @Test
-    void convertToRub_NullCurrency() {
+    void convertToRubNullCurrency() {
         assertEquals(100, HhGetterFromBio.convertToRub(100, null));
     }
 
     @Test
-    void getText_WithDefaultValue() {
+    void getTextWithDefaultValue() {
         ObjectNode node = objectMapper.createObjectNode();
         node.put("field1", "value1");
         node.put("field2", 123);
@@ -34,7 +34,7 @@ class HhGetterFromBioTest {
     }
 
     @Test
-    void getText_WithCustomDefaultValue() {
+    void getTextWithCustomDefaultValue() {
         ObjectNode node = objectMapper.createObjectNode();
         node.put("field1", "value1");
 
@@ -59,7 +59,7 @@ class HhGetterFromBioTest {
     }
 
     @Test
-    void parseSalaryField_InvalidField() {
+    void parseSalaryFieldInvalidField() {
         ObjectNode salNode = objectMapper.createObjectNode();
         salNode.put("from", 1000);
 
@@ -67,7 +67,7 @@ class HhGetterFromBioTest {
     }
 
     @Test
-    void parseSalaryField_NonNumberValue() {
+    void parseSalaryFieldNonNumberValue() {
         ObjectNode salNode = objectMapper.createObjectNode();
         salNode.put("from", "not a number");
 
@@ -75,14 +75,14 @@ class HhGetterFromBioTest {
     }
 
     @Test
-    void parseSalaryField_NonObjectNode() {
+    void parseSalaryFieldNonObjectNode() {
         JsonNode node = objectMapper.createArrayNode();
 
         assertNull(HhGetterFromBio.parseSalaryField(node, "from"));
     }
 
     @Test
-    void parseSalaryField_NullNode() {
+    void parseSalaryFieldNullNode() {
         assertNull(HhGetterFromBio.parseSalaryField(null, "from"));
     }
 }
