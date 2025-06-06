@@ -16,11 +16,10 @@ public class VacancyStatsService {
     private final VacancyService vacancyService;
 
     public Map<String, Double> getAverageSalaryByLanguage() {
-        List<Vacancy> vacancies = vacancyService.getVacancies(null, null, true);
+        List<Vacancy> vacancies = vacancyService.getAllVacanciesForStats();
 
         return vacancies.stream()
                 .filter(v -> v.getSalaryFrom() != null || v.getSalaryTo() != null)
-
                 .collect(Collectors.groupingBy(
                         Vacancy::getLanguage,
                         Collectors.averagingDouble(v -> {
@@ -34,7 +33,6 @@ public class VacancyStatsService {
                                 sum += v.getSalaryTo();
                                 count++;
                             }
-
                             return count > 0 ? sum / count : 0;
                         })
                 ));

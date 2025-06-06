@@ -14,3 +14,5 @@ CREATE TABLE IF NOT EXISTS vacancies (
 );
 
 TRUNCATE TABLE vacancies;
+
+select count(*) from vacancies;

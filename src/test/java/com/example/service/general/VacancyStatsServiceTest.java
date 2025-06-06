@@ -32,13 +32,6 @@ public class VacancyStatsServiceTest {
 
     @Test
     void testGetAverageSalaryByLanguageBasicCase() {
-        /*
-         Java: salaryFrom=1000, salaryTo=2000  → среднее = (1000+2000)/2 = 1500
-         Java: salaryFrom=1500, salaryTo=null  → среднее = 1500
-         Python: salaryFrom=null, salaryTo=3000 → среднее = 3000
-         Python: salaryFrom=2000, salaryTo=4000 → среднее = (2000+4000)/2 = 3000
-         Go:  salaryFrom=null, salaryTo=null   → фильтруется (игнорируется)
-         */
         Vacancy v1 = new Vacancy();
         v1.setLanguage("Java");
         v1.setSalaryFrom(1000);
@@ -65,17 +58,14 @@ public class VacancyStatsServiceTest {
         v5.setSalaryTo(null);
 
         List<Vacancy> list = Arrays.asList(v1, v2, v3, v4, v5);
-        when(vacancyService.getVacancies(null, null, true)).thenReturn(list);
+        when(vacancyService.getAllVacanciesForStats()).thenReturn(list); // Updated method call
 
         Map<String, Double> result = statsService.getAverageSalaryByLanguage();
 
-        // Ожидаемые средние:
-        // Java: (1500 + 1500) / 2 = 1500.0
-        // Python: (3000 + 3000) / 2 = 3000.0
         assertEquals(2, result.size());
         assertEquals(1500.0, result.get("Java"), 0.0001);
         assertEquals(3000.0, result.get("Python"), 0.0001);
-        assertFalse(result.containsKey("Go"), "Вакансии без salaryFrom и salaryTo не должны учитываться");
+        assertFalse(result.containsKey("Go"));
     }
 
     @Test

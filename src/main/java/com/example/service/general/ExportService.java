@@ -29,7 +29,7 @@ public class ExportService {
         response.setContentType("text/csv; charset=UTF-8");
         response.setHeader("Content-Disposition", "attachment; filename=\"vacancies.csv\"");
 
-        List<Vacancy> vacancies = vacancyService.getVacancies(null, null, false);
+        List<Vacancy> vacancies = vacancyService.getAllVacanciesForStats();
 
         try (PrintWriter writer = response.getWriter()) {
             // чтобы правильно определил кодировку UTF-8
@@ -76,7 +76,7 @@ public class ExportService {
         response.setHeader("Content-Disposition", "attachment; filename=\"vacancies.xlsx\"");
         response.setCharacterEncoding("UTF-8");
 
-        List<Vacancy> vacancies = vacancyService.getVacancies(null, null, false);
+        List<Vacancy> vacancies = vacancyService.getAllVacanciesForStats();
 
         try (Workbook workbook = new XSSFWorkbook()) {
             Sheet sheet = workbook.createSheet("Vacancies");

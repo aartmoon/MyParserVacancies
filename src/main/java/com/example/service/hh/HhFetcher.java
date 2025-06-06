@@ -12,6 +12,8 @@ import com.example.config.Constants;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.example.config.Constants.CITIES;
+
 @Service
 @RequiredArgsConstructor
 public class HhFetcher implements VacancyFetcher {

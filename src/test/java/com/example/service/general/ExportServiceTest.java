@@ -22,7 +22,6 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-
 public class ExportServiceTest {
 
     @Mock
@@ -53,21 +52,18 @@ public class ExportServiceTest {
         v.setPublishedAt(LocalDateTime.of(2025, 1, 15, 10, 30, 0));
 
         List<Vacancy> list = Collections.singletonList(v);
-        when(vacancyService.getVacancies(null, null, false)).thenReturn(list);
+        when(vacancyService.getAllVacanciesForStats()).thenReturn(list);
 
         MockHttpServletResponse response = new MockHttpServletResponse();
         exportService.writeVacanciesCsv(response);
 
-        // Проверяем, что Content-Type содержит UTF-8
         assertEquals("text/csv; charset=UTF-8", response.getContentType());
         assertTrue(response.getHeader("Content-Disposition").contains("vacancies.csv"));
 
-        // Получаем строку и удаляем BOM, если он есть
         String raw = response.getContentAsString(StandardCharsets.UTF_8);
         String content = raw.replaceFirst("^\\uFEFF", "");
 
         String[] lines = content.split("\\r?\\n", -1);
-        // минимум 2 строки: заголовок и одна запись
         assertTrue(lines.length >= 2);
 
         assertEquals(
@@ -85,7 +81,6 @@ public class ExportServiceTest {
 
     @Test
     void testWriteVacanciesCsvMultipleVacancies_withNullFields() throws IOException {
-        // Два объекта Vacancy: один заполнен, второй — все null
         Vacancy full = new Vacancy();
         full.setId(1L);
         full.setTitle("Full Stack");
@@ -103,7 +98,7 @@ public class ExportServiceTest {
         partial.setId(2L);
 
         List<Vacancy> list = Arrays.asList(full, partial);
-        when(vacancyService.getVacancies(null, null, false)).thenReturn(list);
+        when(vacancyService.getAllVacanciesForStats()).thenReturn(list);
 
         MockHttpServletResponse response = new MockHttpServletResponse();
         exportService.writeVacanciesCsv(response);
@@ -122,11 +117,8 @@ public class ExportServiceTest {
         assertTrue(lines[1].startsWith("1,\"Full Stack\",\"TechCo\",\"https://techco.com/job/1\",\"Munich\",\"Go\",\"3000\",\"6000\",\"React, Node.js\",\"Develop web\",2025-02-01 12:00:00"));
 
         String[] tokensPartial = lines[2].split(",", -1);
-        // ID = 2
         assertEquals("2", tokensPartial[0]);
-        // Всего 11 токенов (ID + 10 полей)
         assertEquals(11, tokensPartial.length);
-        // Поля 1..10 должны быть пустыми или экранированными "" (но date в данном случае тоже пустое без кавычек)
         for (int i = 1; i < tokensPartial.length; i++) {
             assertTrue(
                     tokensPartial[i].equals("") || tokensPartial[i].equals("\"\""),
@@ -150,12 +142,11 @@ public class ExportServiceTest {
         v.setResponsibility("Build REST API");
         v.setPublishedAt(LocalDateTime.of(2025, 3, 10, 9, 45, 0));
 
-        when(vacancyService.getVacancies(null, null, false)).thenReturn(Collections.singletonList(v));
+        when(vacancyService.getAllVacanciesForStats()).thenReturn(Collections.singletonList(v));
 
         MockHttpServletResponse response = new MockHttpServletResponse();
         exportService.writeVacanciesXlsx(response);
 
-        // Content-Type может содержать ";charset=UTF-8", поэтому проверяем startsWith
         assertTrue(
                 response.getContentType().startsWith("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"),
                 "Неверный Content-Type: " + response.getContentType()
@@ -178,26 +169,25 @@ public class ExportServiceTest {
             );
         }
 
-        // Проверяем строку с данными
         Row dataRow = sheet.getRow(1);
         assertEquals(100L, (long) dataRow.getCell(0).getNumericCellValue());
-        assertEquals("Backend Dev",          dataRow.getCell(1).getStringCellValue());
-        assertEquals("DataCorp",             dataRow.getCell(2).getStringCellValue());
+        assertEquals("Backend Dev", dataRow.getCell(1).getStringCellValue());
+        assertEquals("DataCorp", dataRow.getCell(2).getStringCellValue());
         assertEquals("https://datacorp.com/jobs/100", dataRow.getCell(3).getStringCellValue());
-        assertEquals("Москва",               dataRow.getCell(4).getStringCellValue());
-        assertEquals("Java",               dataRow.getCell(5).getStringCellValue());
-        assertEquals("7000",                 dataRow.getCell(6).getStringCellValue());
-        assertEquals("9000",                 dataRow.getCell(7).getStringCellValue());
-        assertEquals("Java, Spring Boot",  dataRow.getCell(8).getStringCellValue());
-        assertEquals("Build REST API",       dataRow.getCell(9).getStringCellValue());
-        assertEquals("2025-03-10 09:45:00",  dataRow.getCell(10).getStringCellValue());
+        assertEquals("Москва", dataRow.getCell(4).getStringCellValue());
+        assertEquals("Java", dataRow.getCell(5).getStringCellValue());
+        assertEquals("7000", dataRow.getCell(6).getStringCellValue());
+        assertEquals("9000", dataRow.getCell(7).getStringCellValue());
+        assertEquals("Java, Spring Boot", dataRow.getCell(8).getStringCellValue());
+        assertEquals("Build REST API", dataRow.getCell(9).getStringCellValue());
+        assertEquals("2025-03-10 09:45:00", dataRow.getCell(10).getStringCellValue());
 
         workbook.close();
     }
 
     @Test
     void testWriteVacanciesXlsxEmptyListGeneratesOnlyHeader() throws IOException {
-        when(vacancyService.getVacancies(null, null, false)).thenReturn(Collections.emptyList());
+        when(vacancyService.getAllVacanciesForStats()).thenReturn(Collections.emptyList());
 
         MockHttpServletResponse response = new MockHttpServletResponse();
         exportService.writeVacanciesXlsx(response);
@@ -207,16 +197,14 @@ public class ExportServiceTest {
         Sheet sheet = workbook.getSheet("Vacancies");
         assertNotNull(sheet, "Лист 'Vacancies' должен существовать");
 
-        // Должен присутствовать только один ряд (заголовок)
         assertEquals(1, sheet.getPhysicalNumberOfRows());
 
-        // Проверяем заголовки в первой строке
         Row headerRow = sheet.getRow(0);
         assertNotNull(headerRow);
-        assertEquals("ID",           headerRow.getCell(0).getStringCellValue());
-        assertEquals("Title",        headerRow.getCell(1).getStringCellValue());
-        assertEquals("CompanyName",  headerRow.getCell(2).getStringCellValue());
-        assertEquals("PublishedAt",  headerRow.getCell(10).getStringCellValue());
+        assertEquals("ID", headerRow.getCell(0).getStringCellValue());
+        assertEquals("Title", headerRow.getCell(1).getStringCellValue());
+        assertEquals("CompanyName", headerRow.getCell(2).getStringCellValue());
+        assertEquals("PublishedAt", headerRow.getCell(10).getStringCellValue());
 
         workbook.close();
     }

@@ -17,19 +17,22 @@ public class TrudVsemApi {
 
     private static final String API_URL = "https://opendata.trudvsem.ru/api/v1/vacancies";
 
-
     private final RestTemplate restTemplate;
     private final TrudVsemRegionMapper regionMapper;
     private final VacancyLogger logger;
 
     public JsonObject fetchVacanciesPage(String language, String city, int page) {
+        if (language == null || language.isBlank()) {
+            return null;
+        }
+
+        String searchQuery = String.format("%s", language);
+
         UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(API_URL)
                 .queryParam("offset", page * PAGE_SIZE_TRUDVSEM)
-                .queryParam("limit", PAGE_SIZE_TRUDVSEM);
+                .queryParam("limit", PAGE_SIZE_TRUDVSEM)
+                .queryParam("text", searchQuery);
 
-        if (language != null && !language.isBlank()) {
-            builder.queryParam("query", language);
-        }
         if (city != null && !city.isBlank()) {
             String regionCode = regionMapper.getRegionCode(city);
             if (regionCode != null) {
@@ -40,12 +43,16 @@ public class TrudVsemApi {
         URI uri = builder.build().encode().toUri();
         logger.logFetchingPage(page);
 
-        String jsonResponse = restTemplate.getForObject(uri, String.class);
-        if (jsonResponse == null || jsonResponse.isBlank()) {
-            logger.logNoMoreItems(page);
+        try {
+            String jsonResponse = restTemplate.getForObject(uri, String.class);
+            if (jsonResponse == null || jsonResponse.isBlank()) {
+                logger.logNoMoreItems(page);
+                return null;
+            }
+            return JsonParser.parseString(jsonResponse).getAsJsonObject();
+        } catch (Exception e) {
+            logger.logFailedToSave(uri.toString(), e.getMessage());
             return null;
         }
-
-        return JsonParser.parseString(jsonResponse).getAsJsonObject();
     }
 }

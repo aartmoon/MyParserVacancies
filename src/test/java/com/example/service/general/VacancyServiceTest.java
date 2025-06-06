@@ -239,30 +239,77 @@ public class VacancyServiceTest {
     }
 
     @Test
-    void getVacanciesWithEmptyLanguageAndEmptyCityUsesFindAll() {
+    void getVacanciesWithEmptyLanguageAndEmptyCity_СейчасВызываетПоВсемПарам() {
         String language = "";
         String city = "";
         boolean withSalary = false;
 
-        Vacancy v1 = new Vacancy();
-        v1.setId(500L);
-        Vacancy v2 = new Vacancy();
-        v2.setId(600L);
+        List<String> languages = List.of("Java", "Python", "PHP");
+        List<String> cities    = List.of("Москва", "Санкт-Петербург", "Екатеринбург");
 
-        when(vacancyRepository.findAll())
-                .thenReturn(Arrays.asList(v1, v2));
+        Vacancy jM = new Vacancy(); jM.setId(1L);   // Java × Москва
+        Vacancy jSP = new Vacancy(); jSP.setId(2L);// Java × Санкт-Петербург
+        Vacancy jE = new Vacancy(); jE.setId(3L);   // Java × Екатеринбург
 
-        List<Vacancy> combined = Arrays.asList(v1, v2);
+        Vacancy pM = new Vacancy(); pM.setId(4L);   // Python × Москва
+        Vacancy pSP = new Vacancy(); pSP.setId(5L);// Python × Санкт-Петербург
+        Vacancy pE = new Vacancy(); pE.setId(6L);   // Python × Екатеринбург
+
+        Vacancy phM = new Vacancy(); phM.setId(7L);    // PHP × Москва
+        Vacancy phSP = new Vacancy(); phSP.setId(8L);  // PHP × Санкт-Петербург
+        Vacancy phE = new Vacancy(); phE.setId(9L);    // PHP × Екатеринбург
+
+        when(vacancyRepository.findByLanguageAndCity("Java", "Москва"))
+                .thenReturn(List.of(jM));
+        when(vacancyRepository.findByLanguageAndCity("Java", "Санкт-Петербург"))
+                .thenReturn(List.of(jSP));
+        when(vacancyRepository.findByLanguageAndCity("Java", "Екатеринбург"))
+                .thenReturn(List.of(jE));
+
+        when(vacancyRepository.findByLanguageAndCity("Python", "Москва"))
+                .thenReturn(List.of(pM));
+        when(vacancyRepository.findByLanguageAndCity("Python", "Санкт-Петербург"))
+                .thenReturn(List.of(pSP));
+        when(vacancyRepository.findByLanguageAndCity("Python", "Екатеринбург"))
+                .thenReturn(List.of(pE));
+
+        when(vacancyRepository.findByLanguageAndCity("PHP", "Москва"))
+                .thenReturn(List.of(phM));
+        when(vacancyRepository.findByLanguageAndCity("PHP", "Санкт-Петербург"))
+                .thenReturn(List.of(phSP));
+        when(vacancyRepository.findByLanguageAndCity("PHP", "Екатеринбург"))
+                .thenReturn(List.of(phE));
+
+        List<Vacancy> rawCombined = Arrays.asList(
+                jM, jSP, jE,
+                pM, pSP, pE,
+                phM, phSP, phE
+        );
+
+        List<Vacancy> expectedCleaned = Arrays.asList(
+                jM, jSP, jE,
+                pM, pSP, pE,
+                phM, phSP, phE
+        );
         when(vacancyCleaner.clean(anyList()))
-                .thenReturn(combined);
+                .thenReturn(expectedCleaned);
 
         List<Vacancy> result = vacancyService.getVacancies(language, city, withSalary);
 
-        assertThat(result).isEqualTo(combined);
 
-        verify(vacancyRepository).findAll();
-        verify(vacancyCleaner).clean(Arrays.asList(v1, v2));
+        assertThat(result).isEqualTo(expectedCleaned);
+
+        for (String lang : languages) {
+            for (String c : cities) {
+                verify(vacancyRepository).findByLanguageAndCity(lang, c);
+            }
+        }
+
+        verify(vacancyCleaner).clean(eq(rawCombined));
+
+        verifyNoMoreInteractions(vacancyRepository);
     }
+
 
     @Test
     void getVacanciesFilterBySalaryReturnsEmpty() {

@@ -11,7 +11,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
-
 import static com.example.config.Constants.MAX_PAGES_TRUDVSEM;
 
 @Service
@@ -93,7 +92,8 @@ public class TrudVsemFetcher implements VacancyFetcher {
         for (JsonElement element : vacArray) {
             try {
                 Vacancy vacancy = parser.parseVacancy(element.getAsJsonObject());
-                if (vacancy != null) {
+                if (vacancy != null && language != null && !language.isBlank()) {
+
                     vacancy.setLanguage(language);
 
                     if (!vacancyRepository.existsByLink(vacancy.getLink())) {
