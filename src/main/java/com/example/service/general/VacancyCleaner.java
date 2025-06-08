@@ -2,7 +2,6 @@ package com.example.service.general;
 
 import com.example.model.Vacancy;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.stream.Collectors;
 

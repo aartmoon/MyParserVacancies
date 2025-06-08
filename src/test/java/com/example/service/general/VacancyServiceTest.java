@@ -3,9 +3,7 @@ package com.example.service.general;
 import com.example.model.Vacancy;
 import com.example.repository.VacancyRepository;
 import com.example.config.Constants;
-import com.example.service.trudvsem.TrudVsemFetcher;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.*;
 import java.util.Arrays;
@@ -89,7 +87,6 @@ public class VacancyServiceTest {
 
         vacancyService.refreshVacancies(language, city);
 
-        // Проверяем, что каждый фетчер вызван для каждого языка
         for (VacancyFetcher fetcher : vacancyFetchers) {
             for (String lang : allLanguages) {
                 verify(fetcher).fetchVacancies(lang, city);
@@ -239,7 +236,7 @@ public class VacancyServiceTest {
     }
 
     @Test
-    void getVacanciesWithEmptyLanguageAndEmptyCity_СейчасВызываетПоВсемПарам() {
+    void getVacanciesWithEmptyLanguageAndEmptyCity() {
         String language = "";
         String city = "";
         boolean withSalary = false;

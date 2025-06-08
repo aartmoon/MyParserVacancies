@@ -1,10 +1,8 @@
 package com.example.service.general;
 
 import com.example.model.Vacancy;
-import com.example.service.general.VacancyService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;

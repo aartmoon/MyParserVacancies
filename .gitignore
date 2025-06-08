@@ -1,6 +1,4 @@
-# ----------------------------
-# Spring Boot / Maven
-# ----------------------------
+
 /target/
 /pom.xml.tag
 /pom.xml.releaseBackup
@@ -11,29 +9,19 @@ dependency-reduced-pom.xml
 buildNumber.properties
 .mvn/timing.properties
 
-# If you use the Maven Wrapper, keep the wrapper jar, ignore everything else
 !/.mvn/wrapper/maven-wrapper.jar
 /.mvn/wrapper/maven-wrapper.properties
 
-# ----------------------------
-# Gradle (если используется Gradle вместо Maven)
-# ----------------------------
 /.gradle/
 /build/
 /!gradle-wrapper.jar
 /gradle-wrapper.properties
 
-# ----------------------------
-# IDE (IntelliJ IDEA, Eclipse, VS Code)
-# ----------------------------
-
-# IntelliJ IDEA
 /.idea/
 /*.iml
 /*.iws
 /out/
 
-# Eclipse
 /.classpath
 /.project
 /.settings/
@@ -41,38 +29,27 @@ buildNumber.properties
 /.apt_generated/
 /factorypath/
 
-# VS Code
 /.vscode/
 
-# ----------------------------
-# Операционная система
-# ----------------------------
-# macOS
+
 .DS_Store
 .AppleDouble
 .LSOverride
 
-# Thumbnails
 ._*
 
-# Files that might appear in the root of a volume
 .DocumentRevisions-V100
 .TemporaryItems
 .Trashes
 .VolumeIcon.icns
 
-# Windows
 Thumbs.db
 ehthumbs.db
 Desktop.ini
 $RECYCLE.BIN/
 
-# Linux
 *~
 
-# ----------------------------
-# Логи, временные файлы
-# ----------------------------
 /logs/
 /*.log
 spring.log
@@ -83,9 +60,6 @@ hs_err_pid*
 *.swo
 /*.bak
 
-# ----------------------------
-# Файлы сборки и отчёты
-# ----------------------------
 /target/classes/
 /target/test-classes/
 /target/site/
@@ -94,37 +68,23 @@ hs_err_pid*
 /target/**/*.war
 /target/**/*.ear
 
-# Jacoco (отчёты покрытия тестами)
 jacoco.exec
 jacoco/
 
-# Surefire и Failsafe (результаты тестирования)
 **/surefire-reports/
 **/failsafe-reports/
 
-# ----------------------------
-# Конфиденциальные файлы
-# ----------------------------
-
-# Настройки среды (например, application-local.properties)
 /src/main/resources/application-local.properties
 /src/main/resources/*.keystore
 /src/main/resources/*.jks
 /src/main/resources/*.p12
 
-# Файлы ключей
 *.pem
 *.key
 
-# ----------------------------
-# Контейнеры Docker
-# ----------------------------
 /docker-compose.override.yml
 Dockerfile.build
 
-# ----------------------------
-# Другие временные и кэш-файлы
-# ----------------------------
 /tmp/
 /temp/
 /.cache/
@@ -140,15 +100,9 @@ build/
 /yarn-error.log
 /dist/
 
-# ----------------------------
-# Docker
-# ----------------------------
 /docker-compose.override.yml
 Dockerfile
 
-# ----------------------------
-# Прочее
-# ----------------------------
 /coverage/
 /.idea_modules/
 .env

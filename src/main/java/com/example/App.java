@@ -11,9 +11,3 @@ public class App {
         SpringApplication.run(App.class, args);
     }
 }
-/*
-пагинация - hard
-добавление языка
-шедулер
-нотфикации
- */

@@ -1,13 +1,10 @@
 package com.example.service.general;
 
 import com.example.model.Vacancy;
-import com.example.service.general.VacancyService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-
-import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -58,7 +55,7 @@ public class VacancyStatsServiceTest {
         v5.setSalaryTo(null);
 
         List<Vacancy> list = Arrays.asList(v1, v2, v3, v4, v5);
-        when(vacancyService.getAllVacanciesForStats()).thenReturn(list); // Updated method call
+        when(vacancyService.getAllVacanciesForStats()).thenReturn(list);
 
         Map<String, Double> result = statsService.getAverageSalaryByLanguage();
 

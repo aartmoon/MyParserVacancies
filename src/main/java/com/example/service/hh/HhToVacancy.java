@@ -5,15 +5,12 @@ import com.example.service.general.VacancyLogger;
 import com.fasterxml.jackson.databind.JsonNode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import lombok.extern.slf4j.Slf4j;
-
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 
 @Service
-@Slf4j
 @RequiredArgsConstructor
 public class HhToVacancy {
     private final VacancyLogger logger;
