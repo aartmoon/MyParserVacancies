@@ -27,51 +27,27 @@
 - JUnit 5
 - Lombok
 
-## Запуск проекта
+### 1. Создайте общую сеть для Docker-контейнеров (один раз):
 
-### 1. Настройка базы данных
+```bash
+docker network create mynet
+```
 
-1. Запустите PostgreSQL в Docker:
+### 2. Запустите базу данных PostgreSQL
+
 ```bash
 docker-compose -f docker-compose.db.yml up -d
 ```
 
-2. Проверьте, что база данных запущена:
-```bash
-docker ps
-```
-
-### 2. Клонируйте репозиторий:
+### 3. Запустите приложение
 
 ```bash
-git clone https://github.com/aartmoon/ParserHHru/
-cd MyParser
+docker-compose -f docker-compose.yml up --build
 ```
 
-### 3. Сборка и запуск
+### 4. Откройте приложение
 
-#### Запуск через Docker
-
-1. Соберите и запустите приложение:
-```bash
-docker-compose up --build
-```
-
-2. Приложение будет доступно по адресу: `http://localhost:8080`
-
-#### Локальный запуск
-
-1. Соберите проект:
-```bash
-mvn clean install
-```
-
-2. Запустите приложение:
-```bash
-mvn spring-boot:run
-```
-
-3. Приложение будет доступно по адресу: `http://localhost:8080`
+Приложение будет доступно по адресу: [http://localhost:8080](http://localhost:8080)
 
 ## Endpoints
 
