@@ -58,7 +58,7 @@ docker-compose -f docker-compose.yml up --build
 
 ## Тестирование
 
-Запуск тестов:
+Запуск тестов (покрытие 86%):
 ```bash
 mvn test
 ```
